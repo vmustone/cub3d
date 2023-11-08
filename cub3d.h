@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 08:12:59 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/02 13:49:56 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/08 08:17:43 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,18 @@
 typedef struct	s_map
 {
 	char	**map;
+	char	*no;
+	char	*so;
+	char	*we;
+	char	*ea;
 	int		rows;
+	int		*floor_color;
+	int		*ceiling_color;
 }				t_map;
+
+void	free_map(t_map *map);
+t_map	*init_map(char **argv);
+int		map_header(t_map *map, int fd);
+int	read_map(t_list **map_info, t_map *map, int fd);
 
 #endif
