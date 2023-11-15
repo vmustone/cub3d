@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:16:44 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/08 08:34:51 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/15 16:23:06 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ int *rgb_string_to_int(char *str) {
 int	map_header(t_map *map, int fd)
 {
 	char	*line;
-	map->rows = 0;
+	int		rows;
 	
-	while (map->rows < 6)
+	rows = 0;
+	while (rows < 6)
 	{
 		line = get_next_line(fd);
 		if (!line)
@@ -82,7 +83,7 @@ int	map_header(t_map *map, int fd)
 			map->ceiling_color = rgb_string_to_int(line);
 		else
 			return (1);
-		map->rows++;
+		rows++;
 	}
 	return (0);
 }
@@ -91,13 +92,16 @@ int	read_map(t_list **map_info, t_map *map, int fd)
 {
 	char	*line;
 	t_list	*lst;
-	while ((line = get_next_line(fd)))
+
+	map->rows = 0;
+	line = get_next_line(fd);
+	while (line && ft_strlen(line) == 1)
 	{
-		if (ft_strlen(line) == 1)
-		{
-			free(line);
-			continue;
-		}
+		free(line);
+		line = get_next_line(fd);
+	}
+	while (line)
+	{
 		lst = ft_lstnew(line);
 		if (!lst)
 		{
@@ -106,6 +110,7 @@ int	read_map(t_list **map_info, t_map *map, int fd)
 		}
 		ft_lstadd_back(map_info, lst);
 		map->rows++;
+		line = get_next_line(fd);
 	}
-	return 0;
+	return (0);
 }

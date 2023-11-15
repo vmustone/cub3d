@@ -6,33 +6,11 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 07:54:05 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/08 11:57:00 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/15 12:23:05 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-int	check_header(t_map *map)
-{
-	if (!map->no || !map->so || !map->ea || !map->we || !map->floor_color
-		|| !map->ceiling_color)
-		return (1);
-	else
-		return (0);
-}
-
-int	check_map(t_map *map)
-{
-	
-}
-
-int	validate(t_map *map)
-{
-	if (check_header(map))
-		return (1);
-	if (check_map(map))
-		return (1);
-}
 
 int	main(int argc, char **argv)
 {
@@ -60,11 +38,12 @@ int	main(int argc, char **argv)
 	}
 	i = 0;
 	printf("rows %d\n", game_map->rows);
+	printf("columns %d\n", game_map->columns);
 	while (game_map->map[i] != NULL)
 	{
 		printf("%s", game_map->map[i]);
 		i++;
 	}
-	free_map(game_map);
+	//free_map(game_map);
 	return (0);
 }

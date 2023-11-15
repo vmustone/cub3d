@@ -6,7 +6,7 @@
 #    By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 07:43:12 by vmustone          #+#    #+#              #
-#    Updated: 2023/11/08 08:19:06 by vmustone         ###   ########.fr        #
+#    Updated: 2023/11/15 12:23:59 by vmustone         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ Libft = libft/libft.a
 
 Flags = -Wall -Werror -Wextra
 
-Src = main.c map_init.c free_map.c header_and_map.c
+Src = main.c map_init.c free_map.c header_and_map.c validate.c
 
 Obj = $(Src:%.c=%.o)
 
