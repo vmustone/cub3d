@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 11:44:22 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/15 16:15:51 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/17 00:20:37 by villemuston      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,50 @@ int	file_name_check(char *argv)
 	}
 }
 
-int	num_of_columns(char *str)
+void	num_of_columns(t_list *data, t_map *map)
 {
-	int	i;
+	int	result;
+	
+	map->columns = 0;
+	while (data)
+	{
+		if ((result = ft_strlen(data->content)) > map->columns)
+			map->columns = result - 1;
+		data = data->next;
+	}
+}
 
-	i = 0;
-	while (str[i] != '\n' && str[1] != '\0')
+void fill_with_spaces(char *row, int current_length, int target_length) {
+    int	i;
+
+	i = current_length;
+	
+	while (i < target_length)
+	{
+        row[i] = ' ';
 		i++;
-	return (i);
+    }
+	row[target_length] = '\n';
 }
 
 int	parse_map(t_list *map_data, t_map *map)
 {
 	int	i;
-	int tmp;
+
 	i = 0;
-	map->columns = 0;
+	num_of_columns(map_data, map);
 	map->map = (char **)malloc(sizeof(char *) * map->rows);
 	while (i < map->rows)
 	{
-		if ((tmp = num_of_columns(map_data->content)) > map->columns)
-			map->columns = tmp;
-		map->map[i] = map_data->content;
+		int current_length;
+
+		current_length = ft_strlen(map_data->content) - 1;
+        map->map[i] = map_data->content;
+		if (current_length < map->columns)
+			fill_with_spaces(map->map[i], current_length, map->columns);
 		map_data = map_data->next;
 		i++;
 	}
-	map->map[i] = NULL;
 	return (0);
 }
 
