@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:16:44 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/15 16:23:06 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/17 12:24:30 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ int	map_header(t_map *map, int fd)
 	{
 		line = get_next_line(fd);
 		if (!line)
+		{
+			free(line);
 			break ;
+		}
 		if (ft_strlen(line) == 1)
 		{
 			free(line);

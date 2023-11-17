@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
+/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 11:44:22 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/17 00:20:37 by villemuston      ###   ########.fr       */
+/*   Updated: 2023/11/17 16:14:31 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,27 @@ void	num_of_columns(t_list *data, t_map *map)
 	}
 }
 
-void fill_with_spaces(char *row, int current_length, int target_length) {
+void fill_with_spaces(char *row, int current_length, int target_length)
+{
     int	i;
 
 	i = current_length;
-	
 	while (i < target_length)
 	{
         row[i] = ' ';
 		i++;
     }
-	row[target_length] = '\n';
+}
+
+int	check_newline(char *data)
+{
+	while (*data)
+	{
+		if (*data == '\n')
+			return (1);
+		data++;
+	}
+	return (0);
 }
 
 int	parse_map(t_list *map_data, t_map *map)
@@ -60,18 +70,26 @@ int	parse_map(t_list *map_data, t_map *map)
 
 	i = 0;
 	num_of_columns(map_data, map);
-	map->map = (char **)malloc(sizeof(char *) * map->rows);
-	while (i < map->rows)
+	map->map = (char **)malloc(sizeof(char *) * (map->rows + 1));
+	while (map_data)
 	{
 		int current_length;
-
-		current_length = ft_strlen(map_data->content) - 1;
+		
+		if (check_newline(map_data->content))
+			current_length = ft_strlen(map_data->content) - 1;
+		else
+			current_length = ft_strlen(map_data->content);
+		if (current_length <= 1)
+			return (1);
+		map->map[i] = (char *)malloc(sizeof(char) * (map->columns + 1));
         map->map[i] = map_data->content;
 		if (current_length < map->columns)
 			fill_with_spaces(map->map[i], current_length, map->columns);
+		map->map[i][map->columns] = '\0';
 		map_data = map_data->next;
 		i++;
 	}
+	map->map[i] = NULL;
 	return (0);
 }
 
@@ -106,8 +124,9 @@ t_map	*init_map(char **argv)
 	map = malloc(sizeof(t_map));
 	if (!map)
 		return (NULL);
-	if (parse(argv[1], map)) //|| validate(map))
+	if (parse(argv[1], map) || validate(map))
 	{
+		printf("invalid map\n");
 		//free_map(map);
 		return (NULL);
 	}

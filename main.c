@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 07:54:05 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/15 12:23:05 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/17 15:12:26 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	main(int argc, char **argv)
 	i = 0;
 	printf("rows %d\n", game_map->rows);
 	printf("columns %d\n", game_map->columns);
-	while (game_map->map[i] != NULL)
+	while (game_map->map[i])
 	{
-		printf("%s", game_map->map[i]);
+		printf("%s\n", game_map->map[i]);
 		i++;
 	}
 	//free_map(game_map);
