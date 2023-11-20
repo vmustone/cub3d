@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:16:44 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/17 12:24:30 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/20 16:10:28 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,30 @@ int *rgb_string_to_int(char *str) {
     return ret;
 }
 
-int	map_header(t_map *map, int fd)
+int parse_header(t_map *map, char *line)
+{
+	int	i;
+	
+	i = ft_strlen(line);
+	line[i - 1] = '\0';
+	if (ft_strncmp(line, "NO ", 3) == 0)
+		map->no = line;
+	else if (ft_strncmp(line, "SO ", 3) == 0)
+		map->so = line;
+	else if (ft_strncmp(line, "WE ", 3) == 0)
+		map->we = line;
+	else if (ft_strncmp(line, "EA ", 3) == 0)
+		map->ea = line;
+	else if (ft_strncmp(line, "F ", 2) == 0)
+		map->floor_color = rgb_string_to_int(line);
+	else if (ft_strncmp(line, "C ", 2) == 0)
+		map->ceiling_color = rgb_string_to_int(line);
+	else
+		return (1);
+	return (0);
+}
+
+int	read_map_header(t_map *map, int fd)
 {
 	char	*line;
 	int		rows;
@@ -72,19 +95,7 @@ int	map_header(t_map *map, int fd)
 			free(line);
 			continue;
 		}
-		if (ft_strncmp(line, "NO ./", 5) == 0)
-			map->no = line;
-		else if (ft_strncmp(line, "SO ./", 5) == 0)
-			map->so = line;
-		else if (ft_strncmp(line, "WE ./", 5) == 0)
-			map->we = line;
-		else if (ft_strncmp(line, "EA ./", 5) == 0)
-			map->ea = line;
-		else if (ft_strncmp(line, "F ", 2) == 0)
-			map->floor_color = rgb_string_to_int(line);
-		else if (ft_strncmp(line, "C ", 2) == 0)
-			map->ceiling_color = rgb_string_to_int(line);
-		else
+		if (parse_header(map, line))
 			return (1);
 		rows++;
 	}

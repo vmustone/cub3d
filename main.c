@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 07:54:05 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/17 15:12:26 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/20 13:55:37 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@ int	main(int argc, char **argv)
 {
 	t_map	*game_map;
 	
+	if(argc != 2)
+		return (printf("wrong input\n"));
+
 	game_map = init_map(argv);
 	if (!game_map)
 		return (1);
-	printf("%s", game_map->no);
-	printf("%s", game_map->so);
-	printf("%s", game_map->we);
-	printf("%s", game_map->ea);
+	printf("%s\n", game_map->no);
+	printf("%s\n", game_map->so);
+	printf("%s\n", game_map->we);
+	printf("%s\n", game_map->ea);
 
 	int i = 0;
 	while (i < 3)
@@ -44,6 +47,6 @@ int	main(int argc, char **argv)
 		printf("%s\n", game_map->map[i]);
 		i++;
 	}
-	//free_map(game_map);
+	free_map(game_map);
 	return (0);
 }
