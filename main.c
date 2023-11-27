@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 07:54:05 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/20 13:55:37 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/27 16:02:21 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int	main(int argc, char **argv)
 		printf("%s\n", game_map->map[i]);
 		i++;
 	}
-	free_map(game_map);
+	//free_map(game_map);
 	return (0);
 }

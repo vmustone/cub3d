@@ -6,7 +6,7 @@
 /*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 11:44:22 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/20 13:39:44 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/11/27 17:08:34 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,27 @@ int	check_newline(char *data)
 	}
 	return (result);
 }
-
+// KORJATTAVA
 int	parse_map(t_list *map_data, t_map *map)
 {
 	int	i;
 
 	i = 0;
 	num_of_columns(map_data, map);
-	map->map = (char **)malloc(sizeof(char *) * (map->rows));
+	map->map = (char **)malloc(sizeof(char *) * map->rows);
+	if (!map->map)
+		return (1);
+	ft_bzero(map->map, sizeof(char *) * map->rows);
 	while (map_data)
 	{
+		printf("%s", map_data->content);
 		int current_length;
 		
 		current_length = check_newline(map_data->content);
 		if (!ft_strcmp(map_data->content, "\n"))
 			return (1);
-		map->map[i] = (char *)malloc(sizeof(char) * (map->columns));
-        map->map[i] = map_data->content;
+		map->map[i] = (char *)malloc(sizeof(char) * map->columns + 1);
+        ft_strlcpy(map->map[i], map_data->content, current_length);
 		if (current_length < map->columns)
 			fill_with_spaces(map->map[i], current_length, map->columns);
 		map->map[i][map->columns] = '\0';
@@ -121,10 +125,10 @@ t_map	*init_map(char **argv)
 	map = malloc(sizeof(t_map));
 	if (!map)
 		return (NULL);
-	if (parse(argv[1], map) || validate(map))
+	if (parse(argv[1], map))// || validate(map))
 	{
 		printf("invalid map\n");
-		free_map(map);
+		//free_map(map);
 		return (NULL);
 	}
 	return (map);
