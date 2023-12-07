@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header_and_map.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:16:44 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/20 16:10:28 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/12/07 06:16:24 by villemuston      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,72 @@
 
 int isNumeric(const char *str)
 {
+	if (*str == '-' || *str == '+')
+		str++;
     while (*str)
 	{
-        if (!ft_isdigit(*str) && *str != '-')
-            return (0);
+        if (!ft_isdigit(*str))
+            return (1);
         str++;
     }
-    return (1);
+    return (0);
 }
 
-int *rgb_string_to_int(char *str) {
-    int		*ret;
-    int		count;
-    char	temp[20];
-    int		temp_index;
-    int		i;
-
-	ret = (int *)malloc(3 * sizeof(int));
-	count = 0;
-	temp_index = 0;
-	i = 0;
-
-    while (str[i] != '\0' && count < 3)
+void	free_str(char **str)
+{
+	int	i;
+	while (str[i])
 	{
-        if (ft_isdigit(str[i]) || (str[i] == '-' && ft_isdigit(str[i + 1])))
-		{
-            temp[temp_index++] = str[i];
-        }
-		else if (temp_index > 0)
-		{
-            temp[temp_index] = '\0';
-            if (isNumeric(temp))
-                ret[count++] = ft_atoi(temp);
-            temp_index = 0;
-        }
-        i++;
-    }
-    return ret;
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
+void	rgb_to_int(char **rgb_array, int *save)
+{
+	int	rgb[3];
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		if (isNumeric(rgb_array[i]))
+			return ;
+		rgb[i] = ft_atoi(rgb_array[i]);
+		if (rgb[i] > 255 || rgb < 0)
+			return ;
+		i++;
+	}
+	*save = rgb[0] << 24 | rgb[1] << 16 | rgb[2] << 8 | 255;
+}
+
+void	remove_spaces(char *line, int len, char **save)
+{
+	line += len;
+	while (*line == ' ')
+		line++;
+	*save = ft_substr(line, 0, ft_strlen(line));
+}
+
+void	rgb_string_to_int(char *input, int *save)
+{
+	char	*str;
+	char	**nbr;
+
+	str = NULL;
+	remove_spaces(input, 2, &str);
+	if (!str)
+		return ;
+	nbr = ft_split(str, ',');
+	free(str);
+	if (!nbr)
+	{
+		free_str(nbr);
+		return ;
+	}
+	rgb_to_int(nbr, save);
+	free_str(nbr);
 }
 
 int parse_header(t_map *map, char *line)
@@ -60,21 +89,26 @@ int parse_header(t_map *map, char *line)
 	i = ft_strlen(line);
 	line[i - 1] = '\0';
 	if (ft_strncmp(line, "NO ", 3) == 0)
-		map->no = line;
+		remove_spaces(line, 3, &map->no);
 	else if (ft_strncmp(line, "SO ", 3) == 0)
-		map->so = line;
+		remove_spaces(line, 3, &map->so);
 	else if (ft_strncmp(line, "WE ", 3) == 0)
-		map->we = line;
+		remove_spaces(line, 3, &map->we);
 	else if (ft_strncmp(line, "EA ", 3) == 0)
-		map->ea = line;
+		remove_spaces(line, 3, &map->ea);
 	else if (ft_strncmp(line, "F ", 2) == 0)
-		map->floor_color = rgb_string_to_int(line);
+		rgb_string_to_int(line, &map->floor_color);
 	else if (ft_strncmp(line, "C ", 2) == 0)
-		map->ceiling_color = rgb_string_to_int(line);
+		rgb_string_to_int(line, &map->ceiling_color);
 	else
+	{
+		free(line);
 		return (1);
+	}
+	free(line);
 	return (0);
 }
+
 
 int	read_map_header(t_map *map, int fd)
 {
@@ -93,10 +127,13 @@ int	read_map_header(t_map *map, int fd)
 		if (ft_strlen(line) == 1)
 		{
 			free(line);
-			continue;
+			continue ;
 		}
 		if (parse_header(map, line))
+		{
+			free(line);
 			return (1);
+		}
 		rows++;
 	}
 	return (0);

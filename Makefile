@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+         #
+#    By: villemustonen <villemustonen@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 07:43:12 by vmustone          #+#    #+#              #
-#    Updated: 2023/11/15 12:23:59 by vmustone         ###   ########.fr        #
+#    Updated: 2023/12/07 05:02:45 by villemuston      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ $(Libft):
 	make -C libft
 
 $(Name): $(Obj) $(Libft)
-	cc $(Flags) $(Obj) $(Libft) -o $(Name)
+	gcc $(Flags) $(Obj) $(Libft) -o $(Name)
 
 clean:
 	rm -f $(Obj)

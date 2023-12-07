@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   free_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/08 08:11:09 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/08 08:12:25 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/12/07 06:13:42 by villemuston      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	free_map(t_map *map)
+void	free_map(t_map *map, t_player *player)
 {
 	int i;
 
 	i = 0;
 	if (map)
 	{
-		while (map->map[i] != NULL)
+		while (i < map->rows)
 		{
 			if (map->map[i])
 				free(map->map[i]);
@@ -33,10 +33,7 @@ void	free_map(t_map *map)
 			free(map->we);
 		if(map->ea)
 			free(map->ea);
-		if(map->floor_color)
-			free(map->floor_color);
-		if(map->ceiling_color)
-			free(map->ceiling_color);
 		free(map);
 	}
+	free(player);
 }

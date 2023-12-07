@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 07:54:05 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/27 16:02:21 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/12/07 06:05:38 by villemuston      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,19 @@ int	main(int argc, char **argv)
 	printf("%s\n", game_map->we);
 	printf("%s\n", game_map->ea);
 
+	printf("floor: %d\n", game_map->floor_color);
+	printf("ceiling: %d\n", game_map->ceiling_color);
 	int i = 0;
-	while (i < 3)
-	{
-		printf("floor; %d\n", game_map->floor_color[i]);
-		i++;
-	}
-	i = 0;
-	while (i < 3)
-	{
-		printf("ceiling; %d\n", game_map->ceiling_color[i]);
-		i++;
-	}
-	i = 0;
-	printf("rows %d\n", game_map->rows);
-	printf("columns %d\n", game_map->columns);
+
+	printf("rows: %d\n", game_map->rows);
+	printf("columns: %d\n", game_map->columns);
 	while (game_map->map[i])
 	{
 		printf("%s\n", game_map->map[i]);
 		i++;
 	}
-	//free_map(game_map);
+	printf("player-x: %d\n", game_map->player->pos_x);
+	printf("player-y: %d\n", game_map->player->pos_y);
+	free_map(game_map, game_map->player);
 	return (0);
 }

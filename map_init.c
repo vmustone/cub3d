@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_init.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 11:44:22 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/27 17:08:34 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/12/07 06:06:10 by villemuston      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	file_name_check(char *argv)
 		return (0);
 	else
 	{
-		perror("Invalid map filename");
+		printf("Invalid map filename");
 		return (1);
 	}
 }
@@ -63,27 +63,24 @@ int	check_newline(char *data)
 	}
 	return (result);
 }
-// KORJATTAVA
+
 int	parse_map(t_list *map_data, t_map *map)
 {
 	int	i;
+	int current_length;
 
 	i = 0;
 	num_of_columns(map_data, map);
 	map->map = (char **)malloc(sizeof(char *) * map->rows);
 	if (!map->map)
 		return (1);
-	ft_bzero(map->map, sizeof(char *) * map->rows);
 	while (map_data)
 	{
-		printf("%s", map_data->content);
-		int current_length;
-		
 		current_length = check_newline(map_data->content);
 		if (!ft_strcmp(map_data->content, "\n"))
 			return (1);
 		map->map[i] = (char *)malloc(sizeof(char) * map->columns + 1);
-        ft_strlcpy(map->map[i], map_data->content, current_length);
+        ft_memcpy(map->map[i], map_data->content, map->columns);
 		if (current_length < map->columns)
 			fill_with_spaces(map->map[i], current_length, map->columns);
 		map->map[i][map->columns] = '\0';
@@ -106,29 +103,33 @@ int	parse(char *file, t_map *map)
 	if(read_map_header(map, fd) || read_map(&map_data, map, fd))
 	{
 		close(fd);
+		ft_lstclear(&map_data, free);
 		return (1);
 	}
 	close(fd);
 	if (parse_map(map_data, map))
+	{
+		ft_lstclear(&map_data, free);
 		return (1);
+	}
+	ft_lstclear(&map_data, free);
 	return (0);
 }
 
 t_map	*init_map(char **argv)
 {
-	t_map	*map;
+	t_map		*map;
 	
 	if (file_name_check(argv[1]))
-	{
 		return (NULL);
-	}
 	map = malloc(sizeof(t_map));
-	if (!map)
+	map->player = malloc(sizeof(t_player));
+	if (!map || !map->player)
 		return (NULL);
-	if (parse(argv[1], map))// || validate(map))
+	if (parse(argv[1], map) || validate(map))
 	{
 		printf("invalid map\n");
-		//free_map(map);
+		free_map(map, map->player);
 		return (NULL);
 	}
 	return (map);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:22:10 by vmustone          #+#    #+#             */
-/*   Updated: 2023/11/27 16:12:15 by vmustone         ###   ########.fr       */
+/*   Updated: 2023/12/07 06:22:43 by villemuston      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,28 @@ int	map_chars(t_map *map)
 int	num_of_players(t_map *map)
 {
 	char	*chars = "NWSE";
-	int		player;
+	int		num_player;
 	int		x;
 	int		y;
 
-	player = 0;
+	num_player = 0;
 	y = 0;
 	while (y < map->rows)
 	{
 		x = 0;
 		while (x < map->columns)
 		{
-			if (ft_strchr(chars, map->map[y][x]))		
-				player++;
+			if (ft_strchr(chars, map->map[y][x]))	
+			{
+				map->player->pos_y = y;
+				map->player->pos_x = x;
+				num_player++;
+			}
 			x++;
 		}
 		y++;
 	}
-	return (player);
+	return (num_player);
 }
 
 char	*save_edge_characters(t_map *map)
@@ -94,14 +98,21 @@ char	*save_edge_characters(t_map *map)
 	return (edge_chars);
 }
 
-int	check_edge_chars(char *edge)
+int	check_edge_chars(char *str)
 {
+	char *edge;
+
+	edge = str;
 	while(*edge)
 	{
 		if (*edge != '1' && *edge != ' ')
+		{
+			free(str);
 			return (1);
+		}
 		edge++;
 	}
+	free(str);
 	return (0);
 }
 
@@ -139,8 +150,8 @@ char *get_surrounding_chars(t_map *map, int y, int x)
 int check_walls(t_map *map)
 {
 	char	*edge;
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 
 	edge = save_edge_characters(map);
 	if (check_edge_chars(edge))
@@ -155,7 +166,6 @@ int check_walls(t_map *map)
 			{
 				if (check_edge_chars(get_surrounding_chars(map, y, x)))
 					return (1);
-			
 			}
 			x++;
 		}
