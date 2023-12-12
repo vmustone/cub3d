@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
+/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 07:54:05 by vmustone          #+#    #+#             */
-/*   Updated: 2023/12/07 06:05:38 by villemuston      ###   ########.fr       */
+/*   Updated: 2023/12/12 16:41:23 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 int	main(int argc, char **argv)
 {
 	t_map	*game_map;
-	
-	if(argc != 2)
-		return (printf("wrong input\n"));
+	int		i;
 
+	if (argc != 2)
+		return (printf("wrong input\n"));
 	game_map = init_map(argv);
 	if (!game_map)
 		return (1);
@@ -26,11 +26,9 @@ int	main(int argc, char **argv)
 	printf("%s\n", game_map->so);
 	printf("%s\n", game_map->we);
 	printf("%s\n", game_map->ea);
-
 	printf("floor: %d\n", game_map->floor_color);
 	printf("ceiling: %d\n", game_map->ceiling_color);
-	int i = 0;
-
+	i = 0;
 	printf("rows: %d\n", game_map->rows);
 	printf("columns: %d\n", game_map->columns);
 	while (game_map->map[i])

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   validate.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: villemustonen <villemustonen@student.42    +#+  +:+       +#+        */
+/*   By: vmustone <vmustone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 12:22:10 by vmustone          #+#    #+#             */
-/*   Updated: 2023/12/07 06:22:43 by villemuston      ###   ########.fr       */
+/*   Updated: 2023/12/12 16:12:11 by vmustone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	check_header(t_map *map)
+static int	check_header(t_map *map)
 {
 	if (!map->no || !map->so || !map->ea || !map->we || !map->floor_color
 		|| !map->ceiling_color)
@@ -21,12 +21,13 @@ int	check_header(t_map *map)
 		return (0);
 }
 
-int	map_chars(t_map *map)
+static int	map_chars(t_map *map)
 {
-	char	*chars = " 01NWSE";
-	int	x;
-	int y;
+	char	*chars;
+	int		x;
+	int		y;
 
+	chars = " 01NWSE";
 	y = 0;
 	if (map->map[y] == NULL)
 		return (1);
@@ -35,7 +36,7 @@ int	map_chars(t_map *map)
 		x = 0;
 		while (x < map->columns)
 		{
-			if (!ft_strchr(chars, map->map[y][x]))		
+			if (!ft_strchr(chars, map->map[y][x]))
 				return (1);
 			x++;
 		}
@@ -44,13 +45,14 @@ int	map_chars(t_map *map)
 	return (0);
 }
 
-int	num_of_players(t_map *map)
+static int	num_of_players(t_map *map)
 {
-	char	*chars = "NWSE";
+	char	*chars;
 	int		num_player;
 	int		x;
 	int		y;
 
+	chars = "NWSE";
 	num_player = 0;
 	y = 0;
 	while (y < map->rows)
@@ -58,7 +60,7 @@ int	num_of_players(t_map *map)
 		x = 0;
 		while (x < map->columns)
 		{
-			if (ft_strchr(chars, map->map[y][x]))	
+			if (ft_strchr(chars, map->map[y][x]))
 			{
 				map->player->pos_y = y;
 				map->player->pos_x = x;
@@ -71,83 +73,7 @@ int	num_of_players(t_map *map)
 	return (num_player);
 }
 
-char	*save_edge_characters(t_map *map)
-{
-    char *edge_chars;
-    int index;
-    int y;
-	int	x;
-
-	edge_chars = malloc(sizeof(char) * ((map->rows + map->columns - 2) * 2));
-	if (!edge_chars)
-		return (NULL);
-	index = 0;
-	y = 0;
-    while (y < map->rows)
-	{
-        x = 0;
-        while (x < map->columns)
-		{
-            if (y == 0 || y == map->rows - 1 || x == 0 || x == map->columns - 1)
-                edge_chars[index++] = map->map[y][x];
-            x++;
-        }
-        y++;
-    }
-    edge_chars[index] = '\0';
-	return (edge_chars);
-}
-
-int	check_edge_chars(char *str)
-{
-	char *edge;
-
-	edge = str;
-	while(*edge)
-	{
-		if (*edge != '1' && *edge != ' ')
-		{
-			free(str);
-			return (1);
-		}
-		edge++;
-	}
-	free(str);
-	return (0);
-}
-
-char *get_surrounding_chars(t_map *map, int y, int x)
-{
-    char *adj_chr;
-    int dx, dy;
-
-    adj_chr = (char *)malloc(sizeof(char) * 9);
-    if (!adj_chr)
-        return NULL;
-    int index = 0;
-    dy = -1;
-    while (dy <= 1)
-	{
-        dx = -1;
-        while (dx <= 1)
-		{
-            int newX = x + dx;
-            int newY = y + dy;
-
-            if (newX >= 0 && newX < map->columns && newY >= 0 && newY < map->rows)
-			{
-                adj_chr[index++] = map->map[newY][newX];
-            }
-            dx++;
-        }
-        dy++;
-    }
-    adj_chr[index] = '\0';
-    return (adj_chr);
-}
-
-
-int check_walls(t_map *map)
+static int	check_walls(t_map *map)
 {
 	char	*edge;
 	int		x;
@@ -171,7 +97,7 @@ int check_walls(t_map *map)
 		}
 		y++;
 	}
-	return(0);
+	return (0);
 }
 
 int	validate(t_map *map)
